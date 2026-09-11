@@ -27,12 +27,13 @@ export function useDecoder(treeNode: q.TreeNode<TopicViewModel> | undefined): De
   useSubscription(viewModel?.onDecoderChange, rerenderOnOverride)
 
   const decoder = viewModel?.decoder
+  const topic = treeNode?.path()
 
   return useCallback(
     message =>
       decoder && message.payload
-        ? decoder.decoder.decode(message.payload, decoder.format)
+        ? decoder.decoder.decode(message.payload, decoder.format, topic)
         : { message: message.payload ?? undefined, decoder: Decoder.NONE },
-    [decoder]
+    [decoder, topic]
   )
 }
